@@ -1,0 +1,52 @@
+﻿@page "/dashboard"
+@using PMN.ViewModels
+@using SharpComponents.Components
+@inject PMN.Client.Services.ProjectService ProjectService
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+
+<link href="~/css/project-dashboard/projectDashboard.css" rel="stylesheet" />
+
+<h3>Dashboard</h3>
+<hr />
+
+@if (projects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<div class="row">
+    @foreach (var project in projects)
+    {
+        <div class="col-4 dashboard-card" @onclick="@(() => ProjectOverview(project.NidProject))">
+            <div class="row dashboard-card-container">
+                <div class="col-12 dashboard-card-title">
+                    @project.TidProject
+                </div>
+                <div class="col-12 dashboard-card-title">
+                    @project.DatProjectStart.ToString("dd/MM/yyyy")
+                </div>
+            </div>
+        </div>
+    }
+</div>
+}
+
+@code {
+    ProjectViewModel[] projects;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    async Task LoadData()
+    {
+        projects = await ProjectService.GetProjects();
+    }
+
+    void ProjectOverview(int ANidProject)
+    {
+        Navigation.NavigateTo($"/projectOverview/{ANidProject}");
+    }
+}

@@ -1,0 +1,47 @@
+﻿@page "/project/{NidProject:int}"
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+@inject PMN.Client.Services.ProjectService ProjectService
+@using SharpComponents.Components;
+@using PMN.ViewModels
+
+<h3>Adicionar Projeto</h3>
+<hr />
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-12">
+        <form>
+            <SharpTextBox Name="TidProject" Id="TidProject" Label="Nome do Projeto" @bind-Text="@project.TidProject"></SharpTextBox>
+            <SharpTextArea Name="DesProject" Id="DesProject" Label="Descrição" @bind-Text="@project.DesProject"></SharpTextArea>
+            <SharpDatePicker Name="DatProjectStart" Id="DatProjectStart" Label="Data Início" @bind-Date="@DatStart"></SharpDatePicker>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="@(async () => await CreateProject())">Adicionar Projeto</button>
+                <button type="button" class="btn btn-warning" @onclick="cancel">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int NidProject { get; set; }
+
+    ProjectTaskViewModel task = new ProjectTaskViewModel();
+
+    protected override void OnInitialized()
+    {
+        task.NidProject = NidProject;
+        base.OnInitialized();
+    }
+
+    protected async Task CreateProject()
+    {
+        await ProjectService.CreateProject(task);
+        Navigation.NavigateTo("projectManagement");
+    }
+
+    void cancel()
+    {
+        Navigation.NavigateTo("/projectManagement");
+    }
+}

@@ -1,0 +1,25 @@
+﻿<div class="form-group">
+    <label class="sharp-form-control-label" for="@Id">@Label</label>
+    <input class="sharp-form-control" type="text" id="@Id" name="@Name" value="@Text" @oninput="OnTextChanged"/>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string Label { get; set; }
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    private Task OnTextChanged(ChangeEventArgs e)
+    {
+        Text = e.Value.ToString();
+
+        return TextChanged.InvokeAsync(Text);
+    }
+}

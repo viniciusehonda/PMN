@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PMN.Data\PMN.Data.csproj" />
+    <ProjectReference Include="..\PMN.Models\PMN.Models.csproj" />
+    <ProjectReference Include="..\PMN.ViewModels\PMN.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

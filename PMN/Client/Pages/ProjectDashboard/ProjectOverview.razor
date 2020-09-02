@@ -1,0 +1,25 @@
+﻿@page "/projectOverview/{NidProject:int}"
+@using PMN.ViewModels
+@using SharpComponents.Components
+@inject PMN.Client.Services.ProjectService ProjectService
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+
+<h3>@project.TidProject</h3>
+<hr />
+
+<div class="col-lg-12 col-md-12 col-12">
+    <div class="row" style="padding: 5px;">
+        <a class="btn btn-primary" href="/ProjectTaskAdd">Adicionar Tarefa</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int NidProject { get; set; }
+    ProjectViewModel project = new ProjectViewModel();
+
+    protected async override Task OnInitializedAsync()
+    {
+        project = await ProjectService.GetProject(NidProject);
+    }
+}

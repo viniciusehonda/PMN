@@ -1,0 +1,25 @@
+﻿<div class="form-group">
+    <label class="sharp-form-control-label" for="@Id">@Label</label>
+    <input class="sharp-form-control" type="date" id="@Id" name="@Name" value="@Date" @oninput="OnDateChanged" />
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string Label { get; set; }
+    [Parameter]
+    public string Date { get; set; }
+
+    [Parameter]
+    public EventCallback<string> DateChanged { get; set; }
+
+    private Task OnDateChanged(ChangeEventArgs e)
+    {
+        Date = e.Value.ToString();
+
+        return DateChanged.InvokeAsync(Date);
+    }
+}

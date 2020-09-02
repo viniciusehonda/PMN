@@ -1,0 +1,80 @@
+﻿@page "/projectManagement"
+@using PMN.ViewModels
+@using SharpComponents.Components
+@inject PMN.Client.Services.ProjectService ProjectService
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+
+<h3>Projetos</h3>
+<hr />
+
+<div class="col-lg-12 col-md-12 col-12">
+    <div class="row" style="padding: 5px;">
+        <a class="btn btn-primary" href="/projectManagementAdd">Adicionar Projeto</a>
+    </div>
+</div>
+
+
+@if (projects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <TableTemplate Items="projects" TItem="ProjectViewModel">
+        <TableHeader>
+            <th>
+                Projeto
+            </th>
+            <th>
+                Descrição
+            </th>
+            <th>
+                Data Início
+            </th>
+            <th colspan="2">
+                Opções
+            </th>
+        </TableHeader>
+        <RowTemplate Context="project">
+            <td>@project.TidProject</td>
+            <td>@project.DesProject</td>
+            <td>@project.DatProjectStart.ToString("dd/MM/yyyy")</td>
+            <td>
+                <button class="btn btn-primary" @onclick="@(() => EditProject(project.NidProject))"
+                        style="width:110px;">
+                    Editar
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-danger" @onclick="@(async () => await DeleteProject(project.NidProject))">
+                    Deletar
+                </button>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+@code {
+    ProjectViewModel[] projects;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    async Task LoadData()
+    {
+        projects = await ProjectService.GetProjects();
+    }
+
+    void EditProject(int ANidProject)
+    {
+        Navigation.NavigateTo($"/projectManagementEdit/{ANidProject}");
+    }
+
+    async Task DeleteProject(int ANidProject)
+    {
+        await ProjectService.DeleteProject(ANidProject);
+        await LoadData();
+    }
+}
